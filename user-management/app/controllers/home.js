@@ -1,16 +1,16 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../models');
+const express = require('express'),
+  router = express.Router(),
+  config = require('../../config/config');
 
 module.exports = (app) => {
   app.use('/', router);
 };
 
-router.get('/', (req, res, next) => {
-  db.Article.findAll().then((articles) => {
-    res.render('index', {
-      title: 'Generator-Express MVC',
-      articles: articles
-    });
+router.get('/', (request, response, next) => {
+  response.status(config.app.http_status_codes.http_200_ok);
+  response.json({
+    status: 'success',
+    type: 'UserManagementDashboard',
+    data: {}
   });
 });
