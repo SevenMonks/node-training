@@ -6,7 +6,7 @@ const genericErrorHandler = (request, response) => {
       status: 'error',
       type: config.app.rest_error_codes.system_error,
       data: {
-        message: 'An internal server error occurred.'
+        message: 'An internal server error occurred'
       }
     };
 

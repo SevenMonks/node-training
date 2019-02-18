@@ -31,9 +31,17 @@ const config = {
         insufficient_permissions: process.env.INSUFFICIENT_PERMISSION || 'InsufficientPermissions',
         system_error: process.env.SYSTEM_ERROR || 'SystemError',
         uniqueness_violation_error: process.env.UNIQUENESS_VIOLATION_ERROR || 'UniquenessViolationError'
+      },
+      database_error_codes: {
+        err_level_query_exec: process.env.ERR_LVL_QRY_EXEC || 'QueryExecutionError',
+        rest_error_code_fetch: process.env.REST_ERR_CODE_FETCH || 'ObjectNotFound',
+        rest_error_code_insert: process.env.REST_ERR_CODE_INSERT || 'ObjectCannotBeSaved',
+        rest_error_code_update: process.env.REST_ERR_CODE_UPDATE || 'ObjectCannotBeUpdated',
+        rest_error_code_delete: process.env.REST_ERR_CODE_DELETE || 'ObjectCannotBeDeleted',
       }
     },
-    port: process.env.APP_PORT
+    port: process.env.APP_PORT,
+    db: `${process.env.DB_DRIVER}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
   },
   production: {
     root: rootPath,
@@ -63,9 +71,17 @@ const config = {
         insufficient_permissions: process.env.INSUFFICIENT_PERMISSION || 'InsufficientPermissions',
         system_error: process.env.SYSTEM_ERROR || 'SystemError',
         uniqueness_violation_error: process.env.UNIQUENESS_VIOLATION_ERROR || 'UniquenessViolationError'
+      },
+      database_error_codes: {
+        err_level_query_exec: process.env.ERR_LVL_QRY_EXEC || 'QueryExecutionError',
+        rest_error_code_fetch: process.env.REST_ERR_CODE_FETCH || 'ObjectNotFound',
+        rest_error_code_insert: process.env.REST_ERR_CODE_INSERT || 'ObjectCannotBeSaved',
+        rest_error_code_update: process.env.REST_ERR_CODE_UPDATE || 'ObjectCannotBeUpdated',
+        rest_error_code_delete: process.env.REST_ERR_CODE_DELETE || 'ObjectCannotBeDeleted',
       }
     },
-    port: process.env.APP_PORT
+    port: process.env.APP_PORT,
+    db: `${process.env.DB_DRIVER}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
   }
 };
 

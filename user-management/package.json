@@ -13,6 +13,7 @@
     "express": "^4.13.3",
     "glob": "^6.0.4",
     "method-override": "^2.3.0",
+    "mysql": "^2.16.0",
     "pg": "^6.0.1",
     "pg-hstore": "2.3.2",
     "sequelize": "^3.5.1"

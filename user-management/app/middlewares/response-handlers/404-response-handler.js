@@ -6,7 +6,7 @@ const resourceNotFoundResponseHandler = (request, response) => {
     status: 'error',
     type: config.app.rest_error_codes.object_not_found,
     data: {
-      message: 'Requested resource was not found.'
+      message: 'Requested resource was not found'
     }
   });
 };
