@@ -1,8 +1,9 @@
 const express = require('express'),
-  glob = require('glob'),
   bodyParser = require('body-parser'),
   compress = require('compression'),
   methodOverride = require('method-override'),
+  sanitizer = require('express-sanitizer'),
+  glob = require('glob'),
   resourceNotFoundResponseHandler = require('../app/middlewares/response-handlers/404-response-handler'),
   genericErrorHandler = require('../app/middlewares/response-handlers/generic-error-handler');
 
@@ -17,6 +18,7 @@ module.exports = (app, config) => {
   }));
   app.use(compress());
   app.use(methodOverride());
+  app.use(sanitizer());
 
   const controllers = glob.sync(config.root + '/app/controllers/**/*.js');
   controllers.forEach((controller) => {
