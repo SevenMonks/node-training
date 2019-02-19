@@ -1,6 +1,6 @@
 const express = require('express'),
   router = express.Router(),
-  bcrypt = require("bcrypt-nodejs"),
+  bcrypt = require('bcrypt-nodejs'),
   config = require('../../../config/config'),
   userModel = require('../../models/user/index.pgsql.model'),
   genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
@@ -131,6 +131,4 @@ router.delete(
   }
 );
 
-module.exports = app => {
-  app.use('/', router);
-};
+module.exports = app => app.use('/', router);

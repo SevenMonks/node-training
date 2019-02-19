@@ -4,10 +4,6 @@ const express = require('express'),
   genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
   successResponseHandler = require('../../middlewares/response-handlers/success-response-handler');
 
-module.exports = (app) => {
-  app.use('/', router);
-};
-
 router.get(
   '/',
   (request, response, next) => {
@@ -20,3 +16,5 @@ router.get(
     successResponseHandler(request, response, next);
   }
 );
+
+module.exports = app => app.use('/', router);
