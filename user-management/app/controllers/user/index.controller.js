@@ -2,6 +2,7 @@ const express = require('express'),
   router = express.Router(),
   { body, validationResult } = require('express-validator/check'),
   bcrypt = require('bcrypt-nodejs'),
+  lodash = require('lodash'),
   config = require('../../../config/config'),
   userModel = require('../../models/user/index.pgsql.model'),
   genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
@@ -39,6 +40,8 @@ router.get(
 router.post(
   '/users',
   body('username')
+    .exists()
+    .withMessage('Username is required')
     .custom((value, { req, loc, path }) => {
       if (0 === value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
         return false;
@@ -47,16 +50,200 @@ router.post(
       return true;
     })
     .withMessage('Username is required')
-    .matches(/^[a-z][a-z0-9]+$/i)
-    .withMessage('Username can only have alphanumeric characters and must start with a letter')
-    .isLength({
-      min: 5
+    .custom((value, { req, loc, path }) => {
+      if (!config.app.universal_regex.username.test(value.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Username must start with a letter')
+    .custom((value, { req, loc, path }) => {
+      if (!config.app.universal_regex.username.test(value.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Username can only have alphanumeric characters')
+    .custom((value, { req, loc, path }) => {
+      if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 5) {
+        return false;
+      }
+
+      return true;
     })
     .withMessage('Username cannot be shorter than 5 characters')
-    .isLength({
-      max: 30
+    .custom((value, { req, loc, path }) => {
+      if (30 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
     })
-    .withMessage('Username caannot be longer than 30 characters'),
+    .withMessage('Username cannot be longer than 30 characters'),
+  body('password')
+    .exists()
+    .withMessage('Password is required')
+    .custom((value, { req, loc, path }) => {
+      if (0 === value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Password is required')
+    .custom((value, { req, loc, path }) => {
+      if (!config.app.universal_regex.password.test(value.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Password must contain atleast one lowercase letter, one uppercase letter, one number and one of these special characters !, @, $, %, &, *')
+    .custom((value, { req, loc, path }) => {
+      if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 10) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Password cannot be shorter than 10 characters')
+    .custom((value, { req, loc, path }) => {
+      if (20 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Password cannot be longer than 20 characters'),
+  body('firstName')
+    .exists()
+    .withMessage('First name is required')
+    .custom((value, { req, loc, path }) => {
+      if (0 === value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('First name is required')
+    .custom((value, { req, loc, path }) => {
+      if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 5) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('First name cannot be shorter than 5 characters')
+    .custom((value, { req, loc, path }) => {
+      if (30 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('First name cannot be longer than 30 characters'),
+  body('midName')
+    .custom((value, { req, loc, path }) => {
+      if (0 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 2) {
+          return false
+        }
+      }
+
+      return true;
+    })
+    .withMessage('Middle name cannot be shorter than 2 characters')
+    .custom((value, { req, loc, path }) => {
+      if (30 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 2) {
+          return false
+        }
+      }
+
+      return true;
+    })
+    .withMessage('Middle name cannot be longer than 30 characters'),
+  body('lastName')
+    .exists()
+    .withMessage('Last name is required')
+    .custom((value, { req, loc, path }) => {
+      if (0 === value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Last name is required')
+    .custom((value, { req, loc, path }) => {
+      if (value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length < 5) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Last name cannot be shorter than 5 characters')
+    .custom((value, { req, loc, path }) => {
+      if (30 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Last name cannot be longer than 30 characters'),
+  body('sex')
+    .exists()
+    .withMessage('Sex parameter must be provided')
+    .custom((value, { req, loc, path }) => {
+      if (0 < value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        const sex = value.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+
+        if (-1 === ['M', 'F'].indexOf(sex)) {
+          return false;
+        }
+
+        return true;
+      }
+
+      return true;
+    })
+    .withMessage("Sex can only be either 'M' or 'F'"),
+  body('age')
+    .exists()
+    .withMessage('Age is required')
+    .custom((value, { req, loc, path }) => {
+      if (0 === value.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Age is required')
+    .custom((value, { req, loc, path }) => {
+      if (lodash.isFinite(+value.replace(/^\s\s*/, '').replace(/\s\s*$/, ''))) {
+        return true;
+      }
+
+      return false;
+    })
+    .withMessage('Age must be a number')
+    .custom((value, { req, loc, path }) => {
+      if (+value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') < 18) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Age cannot be less than 18')
+    .custom((value, { req, loc, path }) => {
+      if (60 < +value.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) {
+        return false;
+      }
+
+      return true;
+    })
+    .withMessage('Age cannot be more than 60'),
   async (request, response, next) => {
     const validationErrors = validationResult(request).mapped();
 
