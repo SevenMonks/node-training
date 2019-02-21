@@ -7,6 +7,11 @@ const successResponseHandler = (request, response, next) => {
   if ((!responseStatus) || (!responseData)) {
     next();
   } else {
+    if (response.locals.token) {
+      response.header('Authorization', `bearer ${response.locals.token}`);
+
+      delete response.locals.token;
+    }
     response.status(responseStatus);
     response.json(responseData);
   }

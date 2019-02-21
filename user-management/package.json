@@ -10,29 +10,27 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
+    "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.13.3",
     "express-sanitizer": "^1.0.5",
     "express-validator": "^5.3.1",
     "glob": "^6.0.4",
+    "jsonwebtoken": "^8.5.0",
     "lodash": "^4.17.11",
     "method-override": "^2.3.0",
     "multer": "^1.4.1",
     "mysql": "^2.16.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "pg": "^6.0.1",
     "pg-hstore": "2.3.2",
     "sequelize": "^3.5.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "debug": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-livereload": "^3.8.0",
     "gulp-nodemon": "^2.0.2",
-    "gulp-plumber": "^1.0.0",
-    "mocha": "^4.0.1",
-    "nodemon": "^1.18.10",
-    "nyc": "^10.0.0",
-    "supertest": "^2.0.0"
+    "gulp-plumber": "^1.0.0"
   }
 }

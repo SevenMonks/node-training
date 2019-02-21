@@ -21,6 +21,18 @@ const fetchUserById = id => {
   );
 };
 
+const fetchUserByUsername = username => {
+  return db.sequelize.query(
+    "select * from tbl_user where username = :username and is_deleted = false",
+    {
+      replacements: {
+        username
+      },
+      type: db.sequelize.QueryTypes.SELECT
+    }
+  );
+};
+
 const addUser = (username, password, firstName, midName, lastName, sex, age) => {
   return db.sequelize.query(
     "insert into tbl_user (username, password, first_name, mid_name, last_name, sex, age) values(:username, :password, :firstName, :midName, :lastName, :sex, :age)",
@@ -63,6 +75,7 @@ const getLastInsertId = () => {
 module.exports = {
   fetchUsers,
   fetchUserById,
+  fetchUserByUsername,
   addUser,
   deleteUser,
   getLastInsertId

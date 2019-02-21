@@ -6,8 +6,9 @@ const express = require('express'),
   bcrypt = require('bcrypt-nodejs'),
   config = require('../../../config/config'),
   profileModel = require('../../models/profile/index.pgsql.model'),
-  genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
-  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler');
+  jwtAuthenticationHandler = require('../../middlewares/authentication/jwt-authentication-handler.middleware'),
+  genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler.middleware'),
+  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler.middleware');
 
 const fileStorage = multer.diskStorage({
   destination: (request, file, callback) => {
@@ -47,6 +48,7 @@ const fileUploader = multer({
 
 router.put(
   '/profile',
+  jwtAuthenticationHandler,
   (request, response, next) => {
     fileUploader(request, response, error => {
       if (error) {
@@ -91,7 +93,7 @@ router.put(
                 status: 'error',
                 type: (('development' === process.env.APP_RUNTIME_ENV) ? config.app.database_error_codes.err_level_query_exec : config.app.rest_error_codes.system_error),
                 data: {
-                  message: (('development' === process.env.APP_RUNTIME_ENV) ? error.message : 'An internal server error occurred')
+                  message: (('development' === process.env.APP_RUNTIME_ENV) ? error.original.message : 'An internal server error occurred')
                 }
               };
               genericErrorHandler(request, response);

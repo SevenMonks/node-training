@@ -1,11 +1,12 @@
 const express = require('express'),
   router = express.Router(),
   config = require('../../../config/config'),
-  genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
-  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler');
+  jwtAuthenticationHandler = require('../../middlewares/authentication/jwt-authentication-handler.middleware'),
+  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler.middleware');
 
 router.get(
-  '/',
+  '/dashboard',
+  jwtAuthenticationHandler,
   (request, response, next) => {
     response.locals.responseStatus = config.app.http_status_codes.http_200_ok;
     response.locals.responseData = {

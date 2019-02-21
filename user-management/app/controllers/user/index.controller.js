@@ -5,11 +5,13 @@ const express = require('express'),
   lodash = require('lodash'),
   config = require('../../../config/config'),
   userModel = require('../../models/user/index.pgsql.model'),
-  genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler'),
-  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler');
+  jwtAuthenticationHandler = require('../../middlewares/authentication/jwt-authentication-handler.middleware'),
+  genericErrorHandler = require('../../middlewares/response-handlers/generic-error-handler.middleware'),
+  successResponseHandler = require('../../middlewares/response-handlers/success-response-handler.middleware');
 
 router.get(
   '/users',
+  jwtAuthenticationHandler,
   async (request, response, next) => {
     try {
       let users = await userModel.fetchUsers();
@@ -39,6 +41,7 @@ router.get(
 
 router.post(
   '/users',
+  jwtAuthenticationHandler,
   body('username')
     .exists()
     .withMessage('Username is required')
@@ -287,7 +290,7 @@ router.post(
           response.locals.responseStatus = config.app.http_status_codes.http_500_internal_server_error;
           response.locals.responseData = {
             status: 'error',
-            type: (('development' === process.env.APP_RUNTIME_ENV) ? config.app.database_error_codes.err_level_query_exec : config.app.rest_error_codes.system_error),
+            type: config.app.rest_error_codes.system_error,
             data: {
               message: (('development' === process.env.APP_RUNTIME_ENV) ? error.message : 'An internal server error occurred')
             }
@@ -311,6 +314,7 @@ router.post(
 
 router.delete(
   '/users',
+  jwtAuthenticationHandler,
   async (request, response, next) => {
     let id = +request.body.id;
 
