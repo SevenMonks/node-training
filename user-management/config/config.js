@@ -82,6 +82,10 @@ const config = {
         rest_error_code_insert: process.env.REST_ERR_CODE_INSERT || 'ObjectCannotBeSaved',
         rest_error_code_update: process.env.REST_ERR_CODE_UPDATE || 'ObjectCannotBeUpdated',
         rest_error_code_delete: process.env.REST_ERR_CODE_DELETE || 'ObjectCannotBeDeleted',
+      },
+      universal_regex: {
+        username: /^[a-z][a-z0-9]+$/i,
+        password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@$%&*])[A-Za-z\d!@$%&*]+$/i
       }
     },
     port: process.env.APP_PORT,

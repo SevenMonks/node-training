@@ -65,7 +65,7 @@ const deleteUser = id => {
 
 const getLastInsertId = () => {
   return db.sequelize.query(
-    "select currval(pg_get_serial_sequence('tbl_user', 'id'))",
+    "select max(id) from tbl_user",
     {
       type: db.sequelize.QueryTypes.SELECT
     }

@@ -266,7 +266,7 @@ router.post(
         firstName = request.sanitize(request.body.firstName.replace(/^\s\s*/, '').replace(/\s\s*$/, '')),
         midName = (request.body.midName.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) ? request.sanitize(request.body.midName.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) : null,
         lastName = request.sanitize(request.body.lastName.replace(/^\s\s*/, '').replace(/\s\s*$/, '')),
-        sex = (request.body.sex.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) ? request.sanitize(request.body.sex.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) : null,
+        sex = (request.body.sex.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) ? request.sanitize(request.body.sex.replace(/^\s\s*/, '').replace(/\s\s*$/, '')) : 'M',
         age = (request.body.age.toString().replace(/^\s\s*/, '').replace(/\s\s*$/, '')) ? +request.sanitize(request.body.age.toString().replace(/^\s\s*/, '').replace(/\s\s*$/, '')) : null;
 
       password = bcrypt.hashSync(password);
@@ -277,12 +277,12 @@ router.post(
         try {
           let result = await userModel.getLastInsertId();
 
-          response.locals.responseStatus = config.app.http_status_codes.http_200_ok;
+          response.locals.responseStatus = config.app.http_status_codes.http_201_created;
           response.locals.responseData = {
             status: 'success',
             type: 'AddNewUser',
             data: {
-              id: result[0].currval
+              id: result[0].max
             }
           };
           successResponseHandler(request, response, next);
